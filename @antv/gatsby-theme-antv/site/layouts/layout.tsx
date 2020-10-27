@@ -204,12 +204,12 @@ const Layout: React.FC<LayoutProps> = ({ children, location, footerProps }) => {
         {...logoProps}
       />
       <main className={styles.main}>{children}</main>
-      <Footer
+      {/* <Footer
         githubUrl={githubUrl}
         rootDomain="https://antv.vision"
         location={location}
         {...footerProps}
-      />
+      /> */}
     </>
   );
 };

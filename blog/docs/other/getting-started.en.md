@@ -53,10 +53,7 @@ const chart = new G2.Chart({
 });
 
 chart.source(data);
-chart
-  .interval()
-  .position('genre*sold')
-  .color('genre');
+chart.interval().position('genre*sold').color('genre');
 chart.render();
 ```
 

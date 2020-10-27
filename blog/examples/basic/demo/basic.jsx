@@ -21,8 +21,5 @@ const chart = new Chart({
 });
 
 chart.source(data);
-chart
-  .interval()
-  .position('genre*sold')
-  .color('genre');
+chart.interval().position('genre*sold').color('genre');
 chart.render();

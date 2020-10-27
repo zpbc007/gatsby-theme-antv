@@ -54,8 +54,6 @@ interface HeaderProps {
   isHomePage?: boolean;
   /** AntV root 域名，直接用主题的可不传 */
   rootDomain?: string;
-  /** 是否展示国内镜像链接 */
-  showChinaMirror?: boolean;
   /** 是否显示 AntV 产品卡片 */
   showAntVProductsCard?: boolean;
   /** algolia 搜索配置 */
@@ -94,7 +92,6 @@ const Header: React.FC<HeaderProps> = ({
   showGithubCorner = true,
   showAntVProductsCard = true,
   showLanguageSwitcher = true,
-  showChinaMirror = true,
   logo,
   onLanguageChange,
   siteUrl,
@@ -184,34 +181,10 @@ const Header: React.FC<HeaderProps> = ({
         onClick: onToggleProductMenuVisible,
       };
 
-  const { name } = GitUrlParse(githubUrl);
-  const chinaMirrorUrl = name ? `https://antv-${name}.gitee.io` : '';
-
   const [logoLink] = useLogoLink({
     siteUrl,
     lang,
     link,
-  });
-
-  const [chinaMirrorHintVisible, updateChinaMirrorHintVisible] = useState(
-    false,
-  );
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      if (
-        lang !== 'zh' ||
-        window.location.host.includes('chartcube') ||
-        window.location.host.includes('gitee.io') ||
-        localStorage.getItem('china-mirror-no-more-hint') ||
-        !isWide
-      ) {
-        return;
-      }
-      updateChinaMirrorHintVisible(true);
-    }, 5000);
-    return () => {
-      clearTimeout(timeout);
-    };
   });
 
   const menu = (
@@ -222,62 +195,6 @@ const Header: React.FC<HeaderProps> = ({
       })}
     >
       {navs && navs.length ? <NavMenuItems navs={navs} path={path} /> : null}
-      {showChinaMirror ? (
-        <Popover
-          title={null}
-          content={
-            <div style={{ width: 300 }}>
-              <div>
-                <span role="img" aria-labelledby="中国">
-                  🇨🇳
-                </span>{' '}
-                AntV 系列网站部署在 gh-pages
-                上，若访问速度不佳，可以前往国内镜像站点。
-              </div>
-              <div style={{ marginTop: 16, textAlign: 'right' }}>
-                <Button
-                  onClick={() => updateChinaMirrorHintVisible(false)}
-                  size="small"
-                  style={{ marginRight: 8 }}
-                >
-                  暂时关闭
-                </Button>
-                <Button
-                  type="primary"
-                  size="small"
-                  onClick={() => {
-                    localStorage.setItem(
-                      'china-mirror-no-more-hint',
-                      Date.now().toString(),
-                    );
-                    updateChinaMirrorHintVisible(false);
-                  }}
-                >
-                  不再提醒
-                </Button>
-              </div>
-            </div>
-          }
-          visible={chinaMirrorHintVisible}
-          placement="bottomRight"
-          align={{
-            offset: [-12, -16],
-          }}
-        >
-          <li style={{ display: logoLink.includes('gitee') ? 'none' : '' }}>
-            <a
-              href={chinaMirrorUrl}
-              onClick={(e) => {
-                e.preventDefault();
-                redirectToChinaMirror(githubUrl);
-              }}
-            >
-              {t('国内镜像')}
-              <ExternalLinkIcon />
-            </a>
-          </li>
-        </Popover>
-      ) : null}
       {showAntVProductsCard ? (
         <li {...productItemProps}>
           <a>
